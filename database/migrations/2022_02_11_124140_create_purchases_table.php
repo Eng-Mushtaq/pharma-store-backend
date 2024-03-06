@@ -15,13 +15,13 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('product');
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
+//            $table->string('product');
+//            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('cascade');
-            $table->decimal('cost_price')->nullable();
-            $table->string('quantity');
-            $table->string('expiry_date')->nullable();
-            $table->string('image')->nullable();
+            $table->decimal('total_price')->nullable();
+//            $table->string('quantity');
+            $table->dateTime('doc_date')->nullable();
+//            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

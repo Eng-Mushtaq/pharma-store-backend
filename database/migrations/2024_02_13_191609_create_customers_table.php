@@ -20,7 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('phone')->nullable();
             $table->string('company')->nullable();
             $table->string('address')->nullable();
-            $table->string('product')->nullable();
+//            $table->string('product')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
         });
