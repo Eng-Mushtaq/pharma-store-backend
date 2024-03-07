@@ -14,11 +14,11 @@ class DashboardController extends Controller
 {
     public function index(){
         $title = 'dashboard';
-        $total_purchases = Purchase::where('expiry_date','!=',Carbon::now())->count();
+        $total_purchases = Purchase::count();
         $total_categories = Category::count();
         $total_suppliers = Supplier::count();
         $total_sales = Sale::count();
-        
+
         $pieChart = app()->chartjs
                 ->name('pieChart')
                 ->type('pie')
@@ -32,10 +32,10 @@ class DashboardController extends Controller
                     ]
                 ])
                 ->options([]);
-        
-        $total_expired_products = Purchase::whereDate('expiry_date', '=', Carbon::now())->count();
+
+        $total_expired_products = Purchase::count();
         $latest_sales = Sale::whereDate('created_at','=',Carbon::now())->get();
-        $today_sales = Sale::whereDate('created_at','=',Carbon::now())->sum('total_price');
+        $today_sales = Sale::whereDate('created_at','=',Carbon::now())->sum('total');
         return view('admin.dashboard',compact(
             'title','pieChart','total_expired_products',
             'latest_sales','today_sales','total_categories'

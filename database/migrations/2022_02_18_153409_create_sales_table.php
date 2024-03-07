@@ -15,7 +15,11 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('cascade');
+//            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('cascade');
+  $table->unsignedBigInteger('customer_id')->nullable();
+//            $table->decimal('total_price')->nullable();
+////            $table->string('quantity');
+//            $table->dateTime('doc_date')->nullable();
 //            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('cascade');
             $table->decimal('total');
             $table->dateTime('doc_date');

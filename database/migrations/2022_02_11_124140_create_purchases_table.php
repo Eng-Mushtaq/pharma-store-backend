@@ -17,7 +17,7 @@ class CreatePurchasesTable extends Migration
             $table->id();
 //            $table->string('product');
 //            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->decimal('total_price')->nullable();
 //            $table->string('quantity');
             $table->dateTime('doc_date')->nullable();

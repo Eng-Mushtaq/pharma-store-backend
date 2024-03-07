@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
 @push('page-css')
-    
-@endpush    
+
+@endpush
 
 @push('page-header')
 <div class="col-sm-12">
@@ -25,25 +25,38 @@
                     @csrf
                     <div class="service-fields mb-3">
                         <div class="row">
-                            
+
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label>دواء <span class="text-danger">*</span></label>
-                                    <select class="select2 form-select form-control" name="product"> 
+                                    <label>الصنف <span class="text-danger">*</span></label>
+                                    <select class="select2 form-select form-control" name="category_id">
                                         @foreach ($purchases as $purchase)
-                                            <option value="{{$purchase->id}}">{{$purchase->product}}</option>
+                                            <option value="{{$purchase->id}}">{{$purchase->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="service-fields mb-3">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label>سعر الشراء<span class="text-danger">*</span></label>
+                                    <label>الاسم<span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" name="name" value="{{old('name')}}">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>الاسم العلمي<span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" name="name_2" value="{{old('name_2')}}">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>السعر <span class="text-danger">*</span></label>
                                     <input class="form-control" type="text" name="price" value="{{old('price')}}">
                                 </div>
                             </div>
@@ -54,12 +67,12 @@
                                     <input class="form-control" type="text" name="discount" value="0">
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
 
-                                    
-                    
+
+
                     <div class="service-fields mb-3">
                         <div class="row">
                             <div class="col-lg-12">
@@ -68,11 +81,26 @@
                                     <textarea class="form-control service-desc" name="description">{{old('description')}}</textarea>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
-                    
-                    
+
+                    <div class="service-fields mb-3">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>تارخ الانتهاء<span class="text-danger">*</span></label>
+                                    <input class="form-control" type="date" name="exp_date">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>صورة الدواء</label>
+                                    <input type="file" name="image" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="submit-section">
                         <button class="btn btn-primary submit-btn" type="submit" name="form_submit" value="submit">تأكيد</button>
                     </div>
@@ -80,10 +108,10 @@
                 <!-- /Add Product -->
 			</div>
 		</div>
-	</div>			
+	</div>
 </div>
 @endsection
 
 @push('page-js')
-	
+
 @endpush

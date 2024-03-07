@@ -3,7 +3,7 @@
 <x-assets.datatables />
 
 @push('page-css')
-	
+
 @endpush
 
 @push('page-header')
@@ -22,7 +22,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-	
+
 		<!-- Products -->
 		<div class="card">
 			<div class="card-body">
@@ -41,14 +41,14 @@
 						</thead>
 						<tbody>
 
-														
+
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 		<!-- /Products -->
-		
+
 	</div>
 </div>
 
@@ -62,12 +62,12 @@
             serverSide: true,
             ajax: "{{route('products.index')}}",
             columns: [
-                {data: 'product', name: 'product'},
+                {data: 'name', name: 'name'},
                 {data: 'category', name: 'category'},
                 {data: 'price', name: 'price'},
-                {data: 'quantity', name: 'quantity'},
+                {data: 'qty', name: 'qty'},
                 {data: 'discount', name: 'discount'},
-				{data: 'expiry_date', name: 'expiry_date'},
+				{data: 'exp_date', name: 'exp_date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
                 language: {
@@ -86,7 +86,7 @@
 
                 },
         });
-        
+
     });
-</script> 
+</script>
 @endpush

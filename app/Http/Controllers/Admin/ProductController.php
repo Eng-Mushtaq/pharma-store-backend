@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
@@ -39,8 +40,8 @@ class ProductController extends Controller
 
                 ->addColumn('category',function($product){
                     $category = null;
-                    if(!empty($product->purchase->category)){
-                        $category = $product->purchase->category->name;
+                    if(!empty($product->category)){
+                        $category = $product->category->name;
                     }
                     return $category;
                 })
@@ -49,12 +50,12 @@ class ProductController extends Controller
                 })
                 ->addColumn('quantity',function($product){
                     if(!empty($product->purchase)){
-                        return $product->purchase->quantity;
+                        return $product->quantity;
                     }
                 })
-                ->addColumn('expiry_date',function($product){
+                ->addColumn('exp_date',function($product){
                     if(!empty($product->purchase)){
-                        return date_format(date_create($product->purchase->expiry_date),'d M, Y');
+                        return date_format(date_create($product->exp_date),'d M, Y');
                     }
                 })
                 ->addColumn('action', function ($row) {
@@ -86,7 +87,7 @@ class ProductController extends Controller
     public function create()
     {
         $title = 'add product';
-        $purchases = Purchase::get();
+        $purchases = Category::get();
         return view('admin.products.create',compact(
             'title','purchases'
         ));
@@ -102,7 +103,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'product'=>'required|max:200',
+            'category_id'=>'required',
+            'name'=>'required|max:200',
             'price'=>'required|min:1',
             'discount'=>'nullable',
             'description'=>'nullable|max:255',
@@ -112,10 +114,13 @@ class ProductController extends Controller
            $price = $request->discount * $request->price;
         }
         Product::create([
-            'purchase_id'=>$request->product,
+            'category_id'=>$request->category_id,
+            'name'=>$request->name,
+            'name2'=>$request->name_2,
             'price'=>$price,
             'discount'=>$request->discount,
             'description'=>$request->description,
+            'exp_date'=>$request->exp_date,
         ]);
         $notification = notify("تم اضافة الصنف بنجاح");
         return redirect()->route('products.index')->with($notification);
@@ -257,7 +262,7 @@ class ProductController extends Controller
                         return $product->purchase->product. ' ' . $image;
                     }
                 })
-               
+
                 ->addColumn('category',function($product){
                     $category = null;
                     if(!empty($product->purchase->category)){

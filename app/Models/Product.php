@@ -10,11 +10,11 @@ class Product extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = [
-        'purchase_id','price',
+        'category_id','price','name','name_2','exp_date',
         'discount','description',
     ];
 
-    public function purchase(){
-        return $this->belongsTo(Purchase::class);
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 }

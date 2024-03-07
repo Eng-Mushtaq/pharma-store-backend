@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $title = 'users';
         if ($request->ajax()) {
-            $users = User::get();
+            $users = User::where('type','=','user')->get();
             return DataTables::of($users)
                 ->addIndexColumn()
                 ->addColumn('created_at', function ($category) {
@@ -96,13 +96,14 @@ class UserController extends Controller
             'email' => $request->email,
             'avatar' => $imageName,
             'password' => Hash::make($request->password),
+            'type' =>'user',
         ]);
         $user->assignRole($request->role);
         $notifiation = notify('تم انشاء المستخدم بنجاح');
         return redirect()->route('users.index')->with($notifiation);
     }
 
-   
+
     /**
      * Show the form for editing the specified resource.
      *

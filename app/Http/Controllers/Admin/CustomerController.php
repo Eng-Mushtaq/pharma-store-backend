@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 
-class SupplierController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,18 +19,18 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
-        $title = 'suppliers';
+        $title = 'customers';
         if($request->ajax()){
-            $suppliers = User::where('type','=','supplier')->get();
+            $suppliers = User::where('type','=','customer')->get();
             return DataTables::of($suppliers)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $editbtn = '<a href="'.route("suppliers.edit", $row->id).'" class="editbtn"><button class="btn btn-primary"><i class="fas fa-edit"></i></button></a>';
-                    $deletebtn = '<a data-id="'.$row->id.'" data-route="'.route('suppliers.destroy', $row->id).'" href="javascript:void(0)" id="deletebtn"><button class="btn btn-danger"><i class="fas fa-trash"></i></button></a>';
-                    if (!auth()->user()->hasPermissionTo('edit-supplier')) {
+                    $editbtn = '<a href="'.route("customers.edit", $row->id).'" class="editbtn"><button class="btn btn-primary"><i class="fas fa-edit"></i></button></a>';
+                    $deletebtn = '<a data-id="'.$row->id.'" data-route="'.route('customers.destroy', $row->id).'" href="javascript:void(0)" id="deletebtn"><button class="btn btn-danger"><i class="fas fa-trash"></i></button></a>';
+                    if (!auth()->user()->hasPermissionTo('edit-customer')) {
                         $editbtn = '';
                     }
-                    if (!auth()->user()->hasPermissionTo('destroy-supplier')) {
+                    if (!auth()->user()->hasPermissionTo('destroy-customer')) {
                         $deletebtn = '';
                     }
                     $btn = $editbtn.' '.$deletebtn;
@@ -40,7 +40,7 @@ class SupplierController extends Controller
                 ->make(true);
         }
 
-        return view('admin.suppliers.index',compact(
+        return view('admin.customers.index',compact(
             'title'
         ));
     }
@@ -52,8 +52,8 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        $title = 'create supplier';
-        return view('admin.suppliers.create',compact(
+        $title = 'create Customer';
+        return view('admin.customers.create',compact(
             'title'
         ));
     }
@@ -81,12 +81,12 @@ class SupplierController extends Controller
             'phone'=>$request->phone,
 //            'company'=>$request->company,
             'address'=>$request->address,
-            'type'=>"supplier",
+            'type'=>"customer",
             'password'=>Hash::make('12345678'),
 //            'comment'=>$request->comment,
         ]);
-        $notification = notify("تم اضافة المورد بنجاح");
-        return redirect()->route('suppliers.index')->with($notification);
+        $notification = notify("تم اضافة العميل بنجاح");
+        return redirect()->route('customers.index')->with($notification);
     }
 
 

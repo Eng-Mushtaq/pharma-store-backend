@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Supplier;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +25,7 @@ class PurchaseController extends Controller
     {
         $title = 'purchases';
         if($request->ajax()){
-            $purchases = Purchase::get();
+            $purchases = User::where('type','=','supplier')->get();
             return DataTables::of($purchases)
                 ->addColumn('product',function($purchase){
                     $image = '';
@@ -31,7 +33,7 @@ class PurchaseController extends Controller
                         $image = '<span class="avatar avatar-sm mr-2">
 						<img class="avatar-img" src="'.asset("storage/purchases/".$purchase->image).'" alt="product">
 					    </span>';
-                    }                 
+                    }
                     return $purchase->product.' ' . $image;
                 })
                 ->addColumn('category',function($purchase){
@@ -77,9 +79,10 @@ class PurchaseController extends Controller
     {
         $title = 'create purchase';
         $categories = Category::get();
-        $suppliers = Supplier::get();
+        $products = Product::get();
+        $suppliers =User::where('type','=','supplier')->get();
         return view('admin.purchases.create',compact(
-            'title','categories','suppliers'
+            'title','categories','suppliers','products'
         ));
     }
 
@@ -118,7 +121,7 @@ class PurchaseController extends Controller
         return redirect()->route('purchases.index')->with($notifications);
     }
 
-    
+
 
     /**
      * Show the form for editing the specified resource.

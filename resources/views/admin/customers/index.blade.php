@@ -8,14 +8,14 @@
 
 @push('page-header')
 <div class="col-sm-7 col-auto">
-	<h3 class="page-title">المورد</h3>
+	<h3 class="page-title">العملاء</h3>
 	<ul class="breadcrumb">
 		<li class="breadcrumb-item"><a href="{{route('dashboard')}}">لوحة التحكم</a></li>
-		<li class="breadcrumb-item active">المورد</li>
+		<li class="breadcrumb-item active">العميل</li>
 	</ul>
 </div>
 <div class="col-sm-5 col">
-	<a href="{{route('suppliers.create')}}" class="btn btn-primary float-right mt-2">اضافة مورد جديد</a>
+	<a href="{{route('customers.create')}}" class="btn btn-primary float-right mt-2">اضافة عميل جديد</a>
 </div>
 @endpush
 
