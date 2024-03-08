@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
+use App\Models\Details;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Supplier;
@@ -25,24 +26,25 @@ class PurchaseController extends Controller
     {
         $title = 'purchases';
         if($request->ajax()){
-            $purchases = User::where('type','=','supplier')->get();
+            $purchases = Purchase::get();
             return DataTables::of($purchases)
-                ->addColumn('product',function($purchase){
-                    $image = '';
-                    if(!empty($purchase->image)){
-                        $image = '<span class="avatar avatar-sm mr-2">
-						<img class="avatar-img" src="'.asset("storage/purchases/".$purchase->image).'" alt="product">
-					    </span>';
-                    }
-                    return $purchase->product.' ' . $image;
-                })
-                ->addColumn('category',function($purchase){
-                    if(!empty($purchase->category)){
-                        return $purchase->category->name;
-                    }
-                })
-                ->addColumn('cost_price',function($purchase){
-                    return settings('app_currency','$'). ' '. $purchase->cost_price;
+//                ->addColumn('product',function($purchase){
+//                    $image = '';
+//                    if(!empty($purchase->image)){
+//                        $image = '<span class="avatar avatar-sm mr-2">
+//						<img class="avatar-img" src="'.asset("storage/purchases/".$purchase->image).'" alt="product">
+//					    </span>';
+//                    }
+//                    return $purchase->product.' ' . $image;
+//                })
+
+//                ->addColumn('category',function($purchase){
+//                    if(!empty($purchase->category)){
+//                        return $purchase->category->name;
+//                    }
+//                })
+                ->addColumn('total_price',function($purchase){
+                    return settings('app_currency','$'). ' '. $purchase->total_price;
                 })
                 ->addColumn('supplier',function($purchase){
                     return $purchase->supplier->name;
@@ -94,29 +96,43 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request);
         $this->validate($request,[
-            'product'=>'required|max:200',
-            'category'=>'required',
-            'cost_price'=>'required|min:1',
-            'quantity'=>'required|min:1',
-            'expiry_date'=>'required',
-            'supplier'=>'required',
-            'image'=>'file|image|mimes:jpg,jpeg,png,gif',
+//            'product'=>'required|max:200',
+//            'category'=>'required',
+//            'cost_price'=>'required|min:1',
+//            'quantity'=>'required|min:1',
+//            'expiry_date'=>'required',
+//            'supplier'=>'required',
+//            'image'=>'file|image|mimes:jpg,jpeg,png,gif',
         ]);
         $imageName = null;
         if($request->hasFile('image')){
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('storage/purchases'), $imageName);
         }
-        Purchase::create([
-            'product'=>$request->product,
-            'category_id'=>$request->category,
-            'supplier_id'=>$request->supplier,
-            'cost_price'=>$request->cost_price,
-            'quantity'=>$request->quantity,
-            'expiry_date'=>$request->expiry_date,
-            'image'=>$imageName,
-        ]);
+        $pur=  new   Purchase();
+        $pur->supplier_id=$request->supplier;
+        $pur->total_price=$request->total;
+        $pur->doc_date=$request->doc_date;
+        $pur->save();
+        $products=$request->product_id;
+        $qty=$request->qty;
+        $price=$request->price;
+
+        for($i=0 ;$i<count($products);$i++){
+            $details= new Details();
+            $details->doc_id=$pur->id;
+            $details->is_sales=0;
+            $details->product_id=$products[$i];
+            $details->qty=$qty[$i];
+            $details->price=$price[$i];
+            $pro=Product::where('id','=',$products[$i])->get()->first();
+            $pro->qty+=$qty[$i];
+            $pro->price = $price[$i] * 1.1;
+            $pro->save();
+            $details->save();
+        }
         $notifications = notify("تمت إضافة فاتورة المشتريات بنجلح");
         return redirect()->route('purchases.index')->with($notifications);
     }

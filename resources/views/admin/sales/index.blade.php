@@ -3,7 +3,7 @@
 <x-assets.datatables />
 
 @push('page-css')
-    
+
 @endpush
 
 @push('page-header')
@@ -24,7 +24,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-	
+
 		<!--  Sales -->
 		<div class="card">
 			<div class="card-body">
@@ -32,22 +32,22 @@
 					<table id="sales-table" class="datatable table table-hover table-center mb-0">
 						<thead>
 							<tr>
-								<th>اسم الدواء</th>
-								<th>الكمية</th>
+								<th>العميل</th>
+{{--								<th>الكمية</th>--}}
 								<th>السعر الاجمالي</th>
 								<th>التاريخ</th>
 								<th class="action-btn">العمليات</th>
 							</tr>
 						</thead>
 						<tbody>
-							
+
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 		<!-- / sales -->
-		
+
 	</div>
 </div>
 
@@ -63,9 +63,9 @@
             ajax: "{{route('sales.index')}}",
             columns: [
                 {data: 'product', name: 'product'},
-                {data: 'quantity', name: 'quantity'},
-                {data: 'total_price', name: 'total_price'},
-				{data: 'date', name: 'date'},
+                // {data: 'quantity', name: 'quantity'},
+                {data: 'total', name: 'total'},
+				{data: 'doc_date', name: 'doc_date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
                 language: {
@@ -84,7 +84,7 @@
 
                 },
         });
-        
+
     });
-</script> 
+</script>
 @endpush

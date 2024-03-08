@@ -3,7 +3,7 @@
 <x-assets.datatables />
 
 @push('page-css')
-    
+
 @endpush
 
 @push('page-header')
@@ -22,7 +22,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-	
+
 		<!-- Recent Orders -->
 		<div class="card">
 			<div class="card-body">
@@ -30,27 +30,27 @@
 					<table id="purchase-table" class="datatable table table-hover table-center mb-0">
 						<thead>
 							<tr>
-								<th>اسم الدواء</th>
-								<th>التصنيف</th>
+{{--								<th>اسم الدواء</th>--}}
+{{--								<th>التصنيف</th>--}}
 								<th>المورد</th>
-								<th>تكلفة الفاتورة</th>
-								<th>الكمية</th>
-								<th>تاريخ الانتهاء</th>
+								<th>مبلغ  الفاتورة</th>
+{{--								<th>الكمية</th>--}}
+								<th>تاريخ الفاتوره</th>
 								<th class="action-btn">العمليات</th>
 							</tr>
 						</thead>
 						<tbody>
-														
+
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 		<!-- /Recent Orders -->
-		
+
 	</div>
 </div>
-@endsection	
+@endsection
 
 @push('page-js')
 <script>
@@ -60,14 +60,14 @@
             serverSide: true,
             ajax: "{{route('purchases.index')}}",
             columns: [
-                {data: 'product', name: 'product'},
-                {data: 'category', name: 'category'},
+                // {data: 'product', name: 'product'},
+                // {data: 'category', name: 'category'},
                 {data: 'supplier', name: 'supplier'},
-                {data: 'cost_price', name: 'cost_price'},
-                {data: 'quantity', name: 'quantity'},
-				{data: 'expiry_date', name: 'expiry_date'},
+                {data: 'total_price', name: 'total_price'},
+                // {data: 'quantity', name: 'quantity'},
+				{data: 'doc_date', name: 'doc_date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]                language: {
+            ] ,               language: {
                     "loadingRecords": "جارٍ التحميل...",
                     "zeroRecords": "لم يعثر على أية سجلات",
                     "lengthMenu": "أظهر _MENU_ مدخلات",
@@ -83,7 +83,7 @@
 
                 },
         });
-        
+
     });
-</script> 
+</script>
 @endpush

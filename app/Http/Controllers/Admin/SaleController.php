@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Details;
 use App\Models\Sale;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Events\PurchaseOutStock;
 use Yajra\DataTables\DataTables;
@@ -30,16 +32,16 @@ class SaleController extends Controller
                         $image = '';
                         if(!empty($sale->product)){
                             $image = null;
-                            if(!empty($sale->product->purchase->image)){
+                            if(!empty($sale->product->image)){
                                 $image = '<span class="avatar avatar-sm mr-2">
                                 <img class="avatar-img" src="'.asset("storage/purchases/".$sale->product->purchase->image).'" alt="image">
                                 </span>';
                             }
-                            return $sale->product->purchase->product. ' ' . $image;
-                        }                 
+                            return $sale->product. ' ' . $image;
+                        }
                     })
-                    ->addColumn('total_price',function($sale){                   
-                        return settings('app_currency','$').' '. $sale->total_price;
+                    ->addColumn('total',function($sale){
+                        return settings('app_currency','$').' '. $sale->total;
                     })
                     ->addColumn('date',function($row){
                         return date_format(date_create($row->created_at),'d M, Y');
@@ -74,9 +76,11 @@ class SaleController extends Controller
     public function create()
     {
         $title = 'create sales';
-        $products = Product::get();
+        $products = Product::where('qty','>=',1)->get();
+//        $products = Product::get();
+        $customers =User::where('type','=','customer')->get();
         return view('admin.sales.create',compact(
-            'title','products'
+            'title','products','customers'
         ));
     }
 
@@ -89,49 +93,74 @@ class SaleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'product'=>'required',
-            'quantity'=>'required|integer|min:1'
+//            'product'=>'required',
+//            'quantity'=>'required|integer|min:1'
         ]);
-        $sold_product = Product::find($request->product);
-        
+//        $sold_product = Product::find($request->product);
+
         /**update quantity of
             sold item from
          purchases
         **/
-        $purchased_item = Purchase::find($sold_product->purchase->id);
-        $new_quantity = ($purchased_item->quantity) - ($request->quantity);
+//        $purchased_item = Purchase::find($sold_product->purchase->id);
+//        $new_quantity = ($purchased_item->quantity) - ($request->quantity);
         $notification = '';
-        if (!($new_quantity < 0)){
+//        if (!($new_quantity < 0)){
+//
+//            $purchased_item->update([
+//                'quantity'=>$new_quantity,
+//            ]);
+//
+//            /**
+//             * calcualting item's total price
+//            **/
+//            $total_price = ($request->quantity) * ($sold_product->price);
+//            Sale::create([
+//                'product_id'=>$request->product,
+//                'quantity'=>$request->quantity,
+//                'total_price'=>$total_price,
+//            ]);
+//
+//            $notification = notify("تم بيع المنتج");
+//        }
 
-            $purchased_item->update([
-                'quantity'=>$new_quantity,
-            ]);
 
-            /**
-             * calcualting item's total price
-            **/
-            $total_price = ($request->quantity) * ($sold_product->price);
-            Sale::create([
-                'product_id'=>$request->product,
-                'quantity'=>$request->quantity,
-                'total_price'=>$total_price,
-            ]);
+//        if($new_quantity <=1 && $new_quantity !=0){
+            // send notification
+//            $product = Purchase::where('quantity', '<=', 1)->first();
+//            event(new PurchaseOutStock($product));
+            // end of notification
+//            $notification = notify("المنتج نفذ من المخزون!!!");
 
-            $notification = notify("تم بيع المنتج");
-        } 
-        if($new_quantity <=1 && $new_quantity !=0){
-            // send notification 
-            $product = Purchase::where('quantity', '<=', 1)->first();
-            event(new PurchaseOutStock($product));
-            // end of notification 
-            $notification = notify("المنتج نفذ من المخزون!!!");
-            
+//        }
+        $notification = notify("المنتج نفذ من المخزون!!!");
+        $sal=  new   Sale();
+        $sal->customer_id=$request->supplier;
+        $sal->total=$request->total;
+        $sal->doc_date=$request->doc_date;
+        $sal->save();
+        $products=$request->product_id;
+        $qty=$request->qty;
+        $price=$request->price;
+
+        for($i=0 ;$i<count($products);$i++){
+            $details= new Details();
+            $details->doc_id=$sal->id;
+            $details->is_sales=1;
+            $details->product_id=$products[$i];
+            $details->qty=$qty[$i];
+            $details->price=$price[$i];
+            $pro=Product::where('id','=',$products[$i])->get()->first();
+            $pro->qty-=$qty[$i];
+//            $pro->price = $price[$i] ;
+            $pro->save();
+            $details->save();
         }
 
         return redirect()->route('sales.index')->with($notification);
     }
 
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -190,14 +219,14 @@ class SaleController extends Controller
             ]);
 
             $notification = notify("تم تحديث المنتج");
-        } 
+        }
         if($new_quantity <=1 && $new_quantity !=0){
-            // send notification 
+            // send notification
             $product = Purchase::where('quantity', '<=', 1)->first();
             event(new PurchaseOutStock($product));
-            // end of notification 
+            // end of notification
             $notification = notify("المنتج ينفد من المخزون!!!");
-            
+
         }
         return redirect()->route('sales.index')->with($notification);
     }
@@ -218,7 +247,7 @@ class SaleController extends Controller
      * Generate sales report form post
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function generateReport(Request $request){
         $this->validate($request,[
@@ -226,7 +255,12 @@ class SaleController extends Controller
             'to_date' => 'required',
         ]);
         $title = 'sales reports';
-        $sales = Sale::whereBetween(DB::raw('DATE(created_at)'), array($request->from_date, $request->to_date))->get();
+        $sales = Details::whereBetween(DB::raw('DATE(created_at)'), array($request->from_date, $request->to_date))->where('is_sales','=',1)->get();
+        if ($sales->isEmpty()) {
+            // Handle empty results (e.g., return an empty array or a message)
+            $sales= []; // Or your desired empty response
+        }
+//        $sales = $sales->with('product');
         return view('admin.sales.reports',compact(
             'sales','title'
         ));
@@ -239,7 +273,7 @@ class SaleController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): \Illuminate\Http\Response
     {
         return Sale::findOrFail($request->id)->delete();
     }

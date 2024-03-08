@@ -4,7 +4,7 @@
 
 
 @push('page-css')
-    
+
 @endpush
 
 @push('page-header')
@@ -23,7 +23,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-	
+
 		@isset($sales)
             <!--  Sales Report -->
             <div class="card">
@@ -40,20 +40,20 @@
                             </thead>
                             <tbody>
                                 @foreach ($sales as $sale)
-                                    @if (!(empty($sale->product->purchase)))
+                                    @if (!(empty($sale->product)))
                                         <tr>
                                             <td>
-                                                {{$sale->product->purchase->product}}
-                                                @if (!empty($sale->product->purchase->image))
+                                                {{$sale->product->name}}
+                                                @if (!empty($sale->product->image))
                                                     <span class="avatar avatar-sm mr-2">
                                                     <img class="avatar-img" src="{{asset("storage/purchases/".$sale->product->purchase->image)}}" alt="image">
                                                     </span>
                                                 @endif
                                             </td>
-                                            <td>{{$sale->quantity}}</td>
-                                            <td>{{AppSettings::get('app_currency', '$')}} {{($sale->total_price)}}</td>
+                                            <td>{{$sale->qty}}</td>
+                                            <td>{{AppSettings::get('app_currency', '$')}} {{($sale->price)}}</td>
                                             <td>{{date_format(date_create($sale->created_at),"d M, Y")}}</td>
-                                            
+
                                         </tr>
                                     @endif
                                 @endforeach
@@ -64,8 +64,8 @@
             </div>
             <!-- / sales Report -->
         @endisset
-       
-		
+
+
 	</div>
 </div>
 
@@ -113,7 +113,7 @@
 <script>
     $(document).ready(function(){
         $('#sales-table').DataTable({
-			dom: 'Bfrtip',		
+			dom: 'Bfrtip',
 			buttons: [
 				{
 				extend: 'collection',

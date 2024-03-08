@@ -27,6 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
           'view-products','create-product','edit-product','destroy-product',
           'view-purchase','create-purchase','edit-purchase','destroy-purchase',
           'view-supplier','create-supplier','edit-supplier','destroy-supplier',
+            'view-customer','create-customer','edit-customer','destroy-customer',
           'view-users','create-user','edit-user','destroy-user',
           'view-access-control',
           'view-role','edit-role','destroy-role','create-role',

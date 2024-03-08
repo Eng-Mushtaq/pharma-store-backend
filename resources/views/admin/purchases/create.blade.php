@@ -30,7 +30,7 @@
 							<div class="col-lg-4">
 								<div class="form-group">
 									<label>الاجمالي<span class="text-danger">*</span></label>
-									<input class="form-control" type="text" name="total" >
+									<input class="form-control" type="text" name="total" id="total" >
 								</div>
 							</div>
 {{--							<div class="col-lg-4">--}}
@@ -77,7 +77,7 @@
                                 </thead>
                                 <tbody id="table-body">
                                 <tr>
-                                    <td><select class="select2 form-select form-control" name="product_id[]">
+                                    <td><select class="select2 form-select form-control" name="product_id[]" data-index="0">
                                         										@foreach ($products as $product)
                                         											<option value="{{$product->id}}">{{$product->name}}</option>
                                         										@endforeach
@@ -116,6 +116,23 @@
 	<script src="{{asset('assets/js/moment.min.js')}}"></script>
 	<script src="{{asset('assets/js/bootstrap-datetimepicker.min.js')}}"></script>
     <script>
+        function calculateGrandTotal() {
+            var grandTotal = 0;
+            $("#table-body tr").each(function() {
+                var rowTotal = calculateRowTotal($(this));
+                grandTotal += rowTotal;
+            });
+            $("#total").val(grandTotal.toFixed(2)); // Display grand total (rounded to 2 decimal places)
+        }
+
+        // Function to calculate total price for a single row
+        function calculateRowTotal(row) {
+            var qty = parseFloat(row.find("input[name='qty[]']").val());
+            var price = parseFloat(row.find("input[name='price[]']").val());
+            var rowTotal = qty * price;
+            row.find(".row-total").text(rowTotal.toFixed(2)); // Display row total if applicable
+            return rowTotal;
+        }
         // $(document).ready(function() {
             // Add event listener for the "Add Row" button
             $("#add-row").click(function(event) {
@@ -123,24 +140,33 @@
                 // Get the last row number
                 var lastRow = $("#table-body tr:last");
                 var rowNumber = lastRow.length ? parseInt(lastRow.find("td:first").text()) + 1 : 1;
+                var lastRow = $("#table-body tr:last");
+                var lastIndex = parseInt(lastRow.find("select[name='product_id[]']").data("index")) || 0; // Handle missing index
 
                 // Create a new table row
-                var newRow = $('<tr> <td><select class="select2 form-select form-control" name="product_id[]">@foreach ($products as $product)<option value="{{$product->id}}">{{$product->name}}</option>@endforeach</select></td> <td> <input type="number" name="qty[]"> </td> <td> <input type="number" name="price[]"> </td> </tr>');
+                var newRow = $('<tr> <td><select class="select2 form-select form-control" name="product_id[]" data-index=$last data-index=' + (lastIndex + 1) +'>@foreach ($products as $product)<option value="{{$product->id}}">{{$product->name}}</option>@endforeach</select></td> <td> <input type="number" name="qty[]"> </td> <td> <input type="number" name="price[]"> </td> </tr>');
 
                 // Add cells to the new row
                 // newRow.append("<td>" + rowNumber + "</td>");
                 // newRow.append("<td><input type='text' name='name'></td>");
-                // newRow.append("<td><button class='remove-row'>Remove</button></td>");
+                newRow.append("<td><button class='remove-row'>Remove</button></td>");
 
                 // Append the new row to the table body
                 $("#table-body").append(newRow);
-
+                // calculateGrandTotal();
                 // Add event listener for the "Remove" button within the new row
                 newRow.find(".remove-row").click(function() {
                     $(this).closest("tr").remove();
                 });
+
             });
         // });
+
+        $("#table-body tr").each(function() {
+            $(this).find("input[name='qty[]'], input[name='price[]']").change(function() {
+                calculateGrandTotal(); // Recalculate grand total on any quantity or price change
+            });
+        });
     </script>
 @endpush
 
