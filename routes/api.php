@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('category',[ApiController::class,'getCategories']);
-Route::get('category/{id}/products',[ApiController::class,'getProductByCategory']);
+Route::get('products',[ApiController::class,'getProductByCategory']);
 //Route::get('category/{id}/products',[ApiController::class,'getProductByCategory']);
 Route::post('cart/add',[ApiController::class,'addToCart']);
 Route::get('cart',[ApiController::class,'getCart']);
