@@ -31,7 +31,7 @@
                                     <th>التصنيف</th>
                                     <th>السعر</th>
                                     <th>الكمية</th>
-                                    <th>نسبة الخصم</th>
+{{--                                    <th>نسبة الخصم</th>--}}
                                     <th>تاريخ الانتهاء</th>
                                     <th class="action-btn">العمليات</th>
                                 </tr>
@@ -58,8 +58,8 @@
                 serverSide: true,
                 ajax: "{{ route('expired') }}",
                 columns: [{
-                        data: 'product',
-                        name: 'product'
+                        data: 'name',
+                        name: 'name'
                     },
                     {
                         data: 'category',
@@ -70,16 +70,13 @@
                         name: 'price'
                     },
                     {
-                        data: 'quantity',
-                        name: 'quantity'
+                        data: 'qty',
+                        name: 'qty'
                     },
+
                     {
-                        data: 'discount',
-                        name: 'discount'
-                    },
-                    {
-                        data: 'expiry_date',
-                        name: 'expiry_date'
+                        data: 'exp_date',
+                        name: 'exp_date'
                     },
                     {
                         data: 'action',

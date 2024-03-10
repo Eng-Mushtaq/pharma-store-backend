@@ -3,7 +3,7 @@
 <x-assets.datatables />
 
 @push('page-css')
-	
+
 @endpush
 
 @push('page-header')
@@ -19,7 +19,7 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-	
+
 		<!-- Outstock Products -->
 		<div class="card">
 			<div class="card-body">
@@ -31,20 +31,20 @@
 								<th>التصنيف</th>
 								<th>السعر</th>
 								<th>الكمية</th>
-								<th>الخصم</th>
+{{--								<th>الخصم</th>--}}
 								<th>تاريخ الانتهاء</th>
 								<th class="action-btn">العمليات</th>
 							</tr>
 						</thead>
 						<tbody>
-							
+
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 		<!-- /Outstock Products-->
-		
+
 	</div>
 </div>
 
@@ -60,12 +60,12 @@
             serverSide: true,
             ajax: "{{route('outstock')}}",
             columns: [
-                {data: 'product', name: 'product'},
+                {data: 'name', name: 'name'},
                 {data: 'category', name: 'category'},
                 {data: 'price', name: 'price'},
-                {data: 'quantity', name: 'quantity'},
-                {data: 'discount', name: 'discount'},
-				{data: 'expiry_date', name: 'expiry_date'},
+                {data: 'qty', name: 'qty'},
+                // {data: 'discount', name: 'discount'},
+				{data: 'exp_date', name: 'exp_date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
                 language: {
@@ -84,7 +84,7 @@
 
                 },
         });
-        
+
     });
-</script> 
+</script>
 @endpush

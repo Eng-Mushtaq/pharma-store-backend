@@ -99,7 +99,7 @@ class CustomerController extends Controller
     public function edit(Supplier $supplier)
     {
         $title = 'edit supplier';
-        return view('admin.suppliers.edit',compact(
+        return view('admin.customers.edit',compact(
             'title','supplier'
         ));
     }
@@ -115,7 +115,7 @@ class CustomerController extends Controller
     {
         $this->validate($request,[
             'name'=>'required|min:10|max:255',
-            'product'=>'required',
+//            'product'=>'required',
             'email'=>'nullable|email|string',
             'phone'=>'nullable|min:10|max:20',
             'company'=>'nullable|max:200|required',
