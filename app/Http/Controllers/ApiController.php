@@ -21,7 +21,8 @@ class ApiController extends Controller
     public  function getProductByCategory(Request  $request): \Illuminate\Http\JsonResponse
     {
 
-        $data['data']=Product::where('category_id','=',$request->cat_id)->get();
+//        where('category_id','=',$request->cat_id)
+        $data['data']=Product::get();
         return response()->json($data);
     }
 
