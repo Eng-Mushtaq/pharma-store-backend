@@ -15,7 +15,7 @@ class ApiController extends Controller
 {
     public  function getCategories(): \Illuminate\Http\JsonResponse
     {
-        $category=Category::all();
+        $category['data']=Category::all();
         return response()->json($category);
     }
     public  function getProductByCategory($id): \Illuminate\Http\JsonResponse
