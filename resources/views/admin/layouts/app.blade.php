@@ -64,20 +64,16 @@
                         <x-alerts.danger :error="$error" />
                     @endforeach
                 @endif
-
                 @yield('content')
                 <!-- add sales modal-->
                 <x-modals.add-sale />
                  <!-- / add sales modal -->
             </div>
         </div>
-
         </div>
         <!-- /Page Wrapper -->
     </div>
-    
     <!-- /Main Wrapper -->
-    
 </body>
 <!-- jQuery -->
 <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>

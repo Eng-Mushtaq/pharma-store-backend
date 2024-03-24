@@ -16,8 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('category',[ApiController::class,'getCategories']);
 Route::get('products',[ApiController::class,'getProductByCategory']);
+Route::get('products/last',[ApiController::class,'getProductLast']);
+
 //Route::get('category/{id}/products',[ApiController::class,'getProductByCategory']);
-Route::post('cart/add',[ApiController::class,'addToCart']);
+Route::middleware('auth:sanctum')->post('cart/add',[ApiController::class,'addToCart']);
 Route::get('cart',[ApiController::class,'getCart']);
 Route::post('/login',[ApiController::class,'login']);
 Route::post('/register',[ApiController::class,'register']);

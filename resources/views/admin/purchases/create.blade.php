@@ -33,19 +33,9 @@
 									<input class="form-control" type="text" name="total" id="total" >
 								</div>
 							</div>
-{{--							<div class="col-lg-4">--}}
-{{--								<div class="form-group">--}}
-{{--									<label>التصنيف <span class="text-danger">*</span></label>--}}
-{{--									<select class="select2 form-select form-control" name="category"> --}}
-{{--										@foreach ($categories as $category)--}}
-{{--											<option value="{{$category->id}}">{{$category->name}}</option>--}}
-{{--										@endforeach--}}
-{{--									</select>--}}
-{{--								</div>--}}
-{{--							</div>--}}
 							<div class="col-lg-4">
 								<div class="form-group">
-									<label>Supplier <span class="text-danger">*</span></label>
+									<label>المورد <span class="text-danger">*</span></label>
 									<select class="select2 form-select form-control" name="supplier">
 										@foreach ($suppliers as $supplier)
 											<option value="{{$supplier->id}}">{{$supplier->name}}</option>
@@ -119,6 +109,7 @@
         function calculateGrandTotal() {
             var grandTotal = 0;
             $("#table-body tr").each(function() {
+
                 var rowTotal = calculateRowTotal($(this));
                 grandTotal += rowTotal;
             });
@@ -129,9 +120,10 @@
         function calculateRowTotal(row) {
             var qty = parseFloat(row.find("input[name='qty[]']").val());
             var price = parseFloat(row.find("input[name='price[]']").val());
+            if(qty!=null && price!=null){
             var rowTotal = qty * price;
             row.find(".row-total").text(rowTotal.toFixed(2)); // Display row total if applicable
-            return rowTotal;
+            return rowTotal;}
         }
         // $(document).ready(function() {
             // Add event listener for the "Add Row" button
@@ -162,11 +154,19 @@
             });
         // });
 
-        $("#table-body tr").each(function() {
-            $(this).find("input[name='qty[]'], input[name='price[]']").change(function() {
-                calculateGrandTotal(); // Recalculate grand total on any quantity or price change
-            });
-        });
+        // $("#table-body tr").each(function() {
+        //     $(this).find("input[name='qty[]'], input[name='price[]']").change(function() {
+        //         calculateGrandTotal(); // Recalculate grand total on any quantity or price change
+        //     });
+        // });
+
+        $(document).on('input', "input[name='qty[]']", function(){
+        calculateGrandTotal();
+       })
+
+       $(document).on('input', "input[name='price[]']", function(){
+        calculateGrandTotal();
+       })
     </script>
 @endpush
 

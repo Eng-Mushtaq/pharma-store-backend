@@ -26,32 +26,56 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
+    public function getProductLast(): \Illuminate\Http\JsonResponse
+    {
+        // Assuming you want the 10 most recently created products
+        $data['data'] = Product::latest()->take(5)->get();
+        return response()->json($data);
+    }
+    
     public  function addToCart(Request  $request): \Illuminate\Http\JsonResponse
     {
 
+        // return response()->json(Auth::user());
         if($request->id) {
             $id=$request->id;
             $qty=$request->qty;
+            $product=Product::find($id);
             if ($request->qty) {
-                $userId = Auth::user()->id; // Assuming user is authenticated
+                $userId = Auth::id(); 
+                // Assuming user is authenticated
                 // Find the existing cart item for the user and product
+              if($request->qty==0){
+                $cartItem = Cart::where('product_id', $id)
+                ->where('user_id', $userId)->delete();
+           return response()->json(["message"=>"Deleted from cart"]);
+              }
+                if($id){
                 $cartItem = Cart::where('product_id', $id)
                     ->where('user_id', $userId)
                     ->first();
-
+                }
                 if ($cartItem) {
                     // Update existing cart item quantity
                     $cartItem->quantity = $qty;
+                    if($product){
+                        $cartItem->total_price=$product->price*$qty;
+                    }
                 } else {
                     // Create a new cart item
+                   
                     $cartItem = new Cart;
                     $cartItem->product_id = $id;
                     $cartItem->user_id = $userId;
                     $cartItem->quantity = $qty;
+                    if($product){
+                        $cartItem->total_price=$product->price*$qty;
+                    }
+                   else{
+                    return response()->json(['message'=>'No such product found'],422);
+                   }
                 }
-
                 $cartItem->save();
-
                 return response()->json($cartItem);
             }
 

@@ -2,7 +2,6 @@
 <div class="sidebar col-lg-2 pt-5 " id="sidebar">
 	<div class="sidebar-inner slimscroll mt-3 ">
 		<div id="sidebar-menu" class="sidebar-menu p-0 m-2">
-
 			<ul>
 				<li class="menu-title">
 					<span>الرئيسية</span>
@@ -16,7 +15,6 @@
 					<a href="{{route('categories.index')}}"><i class="fe fe-layout"></i> <span>التصنيفات</span></a>
 				</li>
 				@endcan
-
 				@can('view-products')
 				<li class="submenu">
 					<a href="#"><i class="fe fe-document"></i> <span> الأصناف</span> <span class="menu-arrow mr-1"></span></a>
@@ -28,7 +26,6 @@
 					</ul>
 				</li>
 				@endcan
-
 				@can('view-purchase')
 				<li class="submenu">
 					<a href="#"><i class="fe fe-star-o"></i> <span> المشتريات</span> <span class="menu-arrow mr-1"></span></a>

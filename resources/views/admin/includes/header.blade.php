@@ -11,13 +11,9 @@
 		</a>
 	</div>
 	<!-- /Logo -->
-	
 	<a href="javascript:void(0);" id="toggle_btn">
 		<i class="fe fe-text-align-left"></i>
 	</a>
-	
-	
-	
 	<!-- Mobile Menu Toggle -->
 	<a class="mobile_btn" id="mobile_btn">
 		<i class="fa fa-bars"></i>
@@ -33,7 +29,6 @@
 		</li>
 		<!-- Notifications -->
 		<li class="nav-item dropdown noti-dropdown">
-			
 			<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 				<i class="fe fe-bell"></i> <span class="badge badge-pill">{{auth()->user()->unReadNotifications->count()}}</span>
 			</a>
