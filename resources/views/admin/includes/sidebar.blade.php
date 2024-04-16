@@ -98,6 +98,9 @@
 					<a href="{{route('users.index')}}"><i class="fe fe-users"></i> <span>المستخدمين</span></a>
 				</li>
 				@endcan
+                <li class="{{ route_is('orders.*') ? 'active' : '' }}">
+                    <a href="{{route('orders.index')}}"><i class="fe fe-list-order"></i> <span>الطلبات</span></a>
+                </li>
 
 				<li class="{{ route_is('profile') ? 'active' : '' }}">
 					<a href="{{route('profile')}}"><i class="fe fe-user-plus"></i> <span>معلومات الحساب</span></a>

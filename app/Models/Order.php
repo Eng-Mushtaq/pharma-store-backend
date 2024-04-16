@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+    protected  $guarded=[];
+    protected $with='details';
+    public  function  user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public  function  details(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(OrderDetail::class,'order_id','id');
+    }
 }
