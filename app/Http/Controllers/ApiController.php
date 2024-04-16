@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,7 +34,7 @@ class ApiController extends Controller
         $data['data'] = Product::latest()->take(5)->get();
         return response()->json($data);
     }
-    
+
     public  function addToCart(Request  $request): \Illuminate\Http\JsonResponse
     {
 
@@ -42,7 +44,7 @@ class ApiController extends Controller
             $qty=$request->qty;
             $product=Product::find($id);
             if ($request->qty) {
-                $userId = Auth::id(); 
+                $userId = Auth::id();
                 // Assuming user is authenticated
                 // Find the existing cart item for the user and product
               if($request->qty==0){
@@ -63,7 +65,7 @@ class ApiController extends Controller
                     }
                 } else {
                     // Create a new cart item
-                   
+
                     $cartItem = new Cart;
                     $cartItem->product_id = $id;
                     $cartItem->user_id = $userId;
@@ -142,6 +144,35 @@ class ApiController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(compact('user', 'token'), 200);
+    }
+    public function checkout(){
+
+//        Auth::user()->id
+        $carts=Cart::where('user_id','=',Auth::user()->id)->get();
+        $total_price=0;
+        if($carts!=null){
+            $order=new Order();
+            $order->user_id= Auth::user()->id;
+            $order->total_price= $total_price;
+            $order->status='new';
+            $order->save();
+            foreach ($carts as $item){
+                $orderDetail=new OrderDetail();
+                $orderDetail->order_id=$order->id;
+                $orderDetail->product_id=$item->product_id;
+                $orderDetail->quantity=$item->quantity;
+                $orderDetail->total_price=$item->total_price;
+                $orderDetail->save();
+                $total_price+=$item->total_price;
+            }
+            $order->total_price= $total_price;
+            $order->save();
+            return response()->json('');
+        }
+//        dd()
+
+
+
     }
 
 
