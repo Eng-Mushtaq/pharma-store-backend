@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Order;
 use App\Models\Sale;
 use App\Models\Category;
 use App\Models\Purchase;
@@ -17,6 +18,7 @@ class DashboardController extends Controller
         $total_purchases = Purchase::count();
         $total_categories = Category::count();
         $total_suppliers = Supplier::count();
+        $count_ordrs=Order::count();
         $total_sales = Sale::count();
 
         $pieChart = app()->chartjs
@@ -38,7 +40,7 @@ class DashboardController extends Controller
         $today_sales = Sale::whereDate('created_at','=',Carbon::now())->sum('total');
         return view('admin.dashboard',compact(
             'title','pieChart','total_expired_products',
-            'latest_sales','today_sales','total_categories'
+            'latest_sales','today_sales','total_categories','count_ordrs'
         ));
     }
 }

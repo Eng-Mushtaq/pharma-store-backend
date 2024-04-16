@@ -45,12 +45,12 @@
                             <i class="fe fe-credit-card"></i>
                         </span>
                         <div class="dash-count">
-                            <h3>{{ $total_categories }}</h3>
+                            <h3>{{ $count_ordrs }}</h3>
                         </div>
                     </div>
                     <div class="dash-widget-info">
 
-                        <h6 class="text-muted">تصنيفات المنتجات</h6>
+                        <h6 class="text-muted"> عدد الطلبات</h6>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-success w-50"></div>
                         </div>
@@ -113,7 +113,7 @@
                             <thead>
                                 <tr>
                                     <th>الدواء</th>
-                                    <th>الكمية</th>
+{{--                                    <th>الكمية</th>--}}
                                     <th>اجمالي السعر</th>
                                     <th>التاريخ</th>
                                 </tr>
@@ -159,10 +159,10 @@
                         data: 'product',
                         name: 'product'
                     },
-                    {
-                        data: 'quantity',
-                        name: 'quantity'
-                    },
+                    // {
+                    //     data: 'quantity',
+                    //     name: 'quantity'
+                    // },
                     {
                         data: 'total_price',
                         name: 'total_price'
