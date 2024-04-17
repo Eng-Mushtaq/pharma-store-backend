@@ -175,6 +175,13 @@ class ApiController extends Controller
 
     }
 
+    public function getOrder(): \Illuminate\Http\JsonResponse
+    {
+        $orders=Order::where('user_id','=',Auth::user()->id)->get();
+        return response()->json($orders);
+
+    }
+
 
 
 }

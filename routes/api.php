@@ -18,6 +18,10 @@ Route::get('category',[ApiController::class,'getCategories']);
 Route::get('products',[ApiController::class,'getProductByCategory']);
 Route::get('products/last',[ApiController::class,'getProductLast']);
 
+Route::get('orders',[ApiController::class,'getOrder']);
+Route::get('cart/checkout',[ApiController::class,'checkout']);
+
+
 //Route::get('category/{id}/products',[ApiController::class,'getProductByCategory']);
 Route::middleware('auth:sanctum')->post('cart/add',[ApiController::class,'addToCart']);
 Route::get('cart',[ApiController::class,'getCart']);
