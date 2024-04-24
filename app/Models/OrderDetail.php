@@ -9,6 +9,7 @@ class OrderDetail extends Model
 {
     use HasFactory;
     protected  $guarded=[];
+    protected $with='product';
     public  function  order(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Order::class,);

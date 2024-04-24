@@ -1,7 +1,6 @@
 # Complete pharmacy management system
 
 # Features
-
 1. Products
 2. Product categories
 3. Purchases

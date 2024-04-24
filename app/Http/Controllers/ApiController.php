@@ -24,8 +24,15 @@ class ApiController extends Controller
     {
 
 //        where('category_id','=',$request->cat_id)
+if($request->has('cat_id')&&$request->cat_id!=0){
+    $data['data']=Product::where('category_id','=',$request->cat_id)->get();
+    return response()->json($data);
+}else{
+
+
         $data['data']=Product::get();
         return response()->json($data);
+}
     }
 
     public function getProductLast(): \Illuminate\Http\JsonResponse
@@ -160,28 +167,33 @@ class ApiController extends Controller
                 $orderDetail=new OrderDetail();
                 $orderDetail->order_id=$order->id;
                 $orderDetail->product_id=$item->product_id;
+                $product=Product::find($item->product_id);
+                $product->qty-=$item->quantity;
+                $product->save();
                 $orderDetail->quantity=$item->quantity;
                 $orderDetail->total_price=$item->total_price;
                 $orderDetail->save();
+                $item->delete();
                 $total_price+=$item->total_price;
             }
             $order->total_price= $total_price;
             $order->save();
-            return response()->json('');
+            // $carts->delete();
+            $data['success']=true;
+            $data['message']='order created successfully';
+            return response()->json($data);
         }
 //        dd()
-
-
 
     }
 
     public function getOrder(): \Illuminate\Http\JsonResponse
     {
         $orders=Order::where('user_id','=',Auth::user()->id)->get();
-        return response()->json($orders);
+        $data[
+            'data'
+        ]=$orders;
+        return response()->json($data);
 
     }
-
-
-
 }
